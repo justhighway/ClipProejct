@@ -1,21 +1,26 @@
 import {useEffect} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
+
 import {
+  ResponseProfile,
   getAccessToken,
   getProfile,
   signOut,
   postSignIn,
   postSignUp,
 } from '@/api/auth';
-import {UseMutationCustomOptions, UseQueryCustomOptions} from '@/types/common';
 import {
   removeEncryptedStorage,
-  setEncryptedStorage,
   removeHeader,
+  setEncryptedStorage,
   setHeader,
 } from '@/utils';
 import queryClient from '@/api/queryClient';
 import {numbers, queryKeys, storageKeys} from '@/constants';
+import type {
+  UseMutationCustomOptions,
+  UseQueryCustomOptions,
+} from '@/types/common';
 
 function useSignUp(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
@@ -28,8 +33,8 @@ function useSignIn(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: postSignIn,
     onSuccess: ({accessToken, refreshToken}) => {
-      setEncryptedStorage(storageKeys.REFRESH_TOKEN, refreshToken);
       setHeader('Authorization', `Bearer ${accessToken}`);
+      setEncryptedStorage(storageKeys.REFRESH_TOKEN, refreshToken);
     },
     onSettled: () => {
       queryClient.refetchQueries({
@@ -44,7 +49,7 @@ function useSignIn(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  const {isSuccess, data, isError} = useQuery({
+  const {data, error, isSuccess, isError} = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     staleTime: numbers.ACCESS_TOKEN_REFRESH_TIME,
@@ -70,10 +75,10 @@ function useGetRefreshToken() {
   return {isSuccess, isError};
 }
 
-function useGetProfile(queryOptions?: UseQueryCustomOptions) {
+function useGetProfile(queryOptions?: UseQueryCustomOptions<ResponseProfile>) {
   return useQuery({
-    queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
     queryFn: getProfile,
+    queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
     ...queryOptions,
   });
 }
@@ -103,11 +108,12 @@ function useAuth() {
   const signOutMutation = useSignOut();
 
   return {
-    isSignIn,
-    getProfileQuery,
     signUpMutation,
     signInMutation,
+    refreshTokenQuery,
+    getProfileQuery,
     signOutMutation,
+    isSignIn,
   };
 }
 

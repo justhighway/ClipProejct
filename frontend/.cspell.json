@@ -1,0 +1,13 @@
+// cspell에 의해 unknown word로 판단되는 단어를 추가
+
+{
+  "words": [
+    "navigations",
+    "SIGNIN",
+    "MYPAGE",
+    "Pressable",
+    "kakao",
+    "Ionicons",
+    "navigaiton"
+  ]
+}

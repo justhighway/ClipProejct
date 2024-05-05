@@ -1,3 +1,4 @@
+import useAuth from '@/hooks/queries/useAuth';
 import React from 'react';
 import {View, Text} from 'react-native';
 

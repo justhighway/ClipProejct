@@ -1,21 +1,36 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {HomeStackParamList} from '@/navigations/stack/HomeStackNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {MainTabParamList} from '@/navigations/bottomTab/MainTabNavigator';
+import {homeNavigations} from '@/constants';
+
+type Navigations = CompositeNavigationProp<
+  StackNavigationProp<HomeStackParamList>,
+  BottomTabNavigationProp<MainTabParamList>
+>;
 
 export default function HomeScreen() {
+  const navigation = useNavigation<Navigations>();
   return (
-    <MapView
-      style={styles.container}
-      provider={PROVIDER_GOOGLE}
-      showsUserLocation
-      followsUserLocation
-      showsMyLocationButton={true}
-    />
+    <View style={styles.container}>
+      <Pressable
+        onPress={() => navigation.navigate(homeNavigations.HOME_ADDITEM)}>
+        <Text style={styles.text}>맵으로 이동</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
   },
 });
