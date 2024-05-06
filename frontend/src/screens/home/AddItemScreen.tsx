@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -95,11 +96,20 @@ export default function AddItemScreen({route}: AddItemScreenProps) {
             returnKeyType="done"
             {...addItem.getTextInputProps('itemDescription')}
           />
-          <InputField
+          {/* <InputField
             value=""
             disabled
+            placeholder="거래 희망 위치를 선택해주세요"
             icon={<Octicons name="location" size={20} color={colors.GREY500} />}
-          />
+          /> */}
+          <Pressable onPress={handleMapPress}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Octicons name="location" size={20} color={colors.GREY500} />
+              <Text style={{marginLeft: 10}}>
+                {selectedLocation?.name || '거래 희망 위치를 선택해주세요'}
+              </Text>
+            </View>
+          </Pressable>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>

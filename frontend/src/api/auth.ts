@@ -1,6 +1,6 @@
 import {Category, Profile} from '@/types/domain';
 import {getEncryptedStorage} from '@/utils';
-import axiosInstance from './axios';
+import {axiosInstance} from '@/api/axios';
 
 // axiosInstance: axios.create로 생성한 axios 인스턴스
 // baseURL: 'http://localhost:3030', withCredentials: true
