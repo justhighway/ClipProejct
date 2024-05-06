@@ -17,11 +17,20 @@ interface Marker {
   score: number;
 }
 
+//! item에 맞게 바꿀 것!!
 interface Post extends Marker {
   title: string;
   address: string;
   date: Date | string;
   description: string;
+}
+
+interface AddItem {
+  itemName: string;
+  itemPrice: string;
+  itemCondition: number;
+  itemDescription: string;
+  itemLocation: string;
 }
 
 interface Profile {
@@ -33,4 +42,4 @@ interface Profile {
   loginType: 'email' | 'kakao' | 'apple';
 }
 
-export type {MarkerColor, Category, ImageUri, Marker, Post, Profile};
+export type {MarkerColor, Category, ImageUri, Marker, Post, Profile, AddItem};

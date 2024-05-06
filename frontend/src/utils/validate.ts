@@ -34,4 +34,25 @@ function validateSignUp(values: UserInfomation & {passwordConfirm: string}) {
   return signupErrors;
 }
 
-export {validateSignIn, validateSignUp};
+function validateAddItem(values: {
+  itemName: string;
+  itemPrice: string;
+  itemDescription: string;
+}) {
+  const errors = {
+    itemName: '',
+    itemPrice: '',
+    itemDescription: '',
+  };
+
+  if (values.itemName.trim() === '') {
+    errors.itemName = '물건의 이름은 1~30자 이내로 입력해주세요.';
+  }
+  if (values.itemPrice.trim() === '') {
+    errors.itemPrice = '물건의 가격은 필수입니다.';
+  }
+
+  return errors;
+}
+
+export {validateSignIn, validateSignUp, validateAddItem};

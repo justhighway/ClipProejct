@@ -1,18 +1,30 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-  useFocusEffect,
 } from 'react-native';
-import {useNavigation, CompositeNavigationProp} from '@react-navigation/native';
+import {
+  useNavigation,
+  CompositeNavigationProp,
+  useFocusEffect,
+} from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 
 import {HomeStackParamList} from '@/navigations/stack/HomeStackNavigator';
 import {MainTabParamList} from '@/navigations/bottomTab/MainTabNavigator';
-import {homeNavigations} from '@/constants';
+import {colors, homeNavigations} from '@/constants';
+import InputField from '@/components/InputField';
+import CustomButton from '@/components/CustomButton';
+import useForm from '@/hooks/useForm';
+import {validateAddItem} from '@/utils';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 type AddItemScreenProps = StackScreenProps<
   HomeStackParamList,
@@ -28,20 +40,19 @@ export default function AddItemScreen({route}: AddItemScreenProps) {
   const navigation = useNavigation<Navigations>();
   // `route.params`에서 `location` 정보를 받습니다.
   const {location} = route.params || {};
-  const [activeLocation, setActiveLocation] = useState(
-    location || defaultLocation,
-  );
-
-  // `location` 정보가 없는 경우 기본값을 설정합니다.
-  const defaultLocation = {
-    latitude: 35,
-    longitude: 125,
-  };
+  const [selectedLocation, setSelectedLocation] = useState(location);
+  const itemPriceRef = useRef<TextInput | null>(null);
+  const itemDescriptionRef = useRef<TextInput | null>(null);
+  const addItem = useForm({
+    initialValue: {itemName: '', itemPrice: '', itemDescription: ''},
+    validate: validateAddItem,
+  });
 
   useFocusEffect(
     useCallback(() => {
       if (route.params?.location) {
-        setActiveLocation(route.params.location);
+        setSelectedLocation(route.params.location);
+        console.log('AddItemScreen: focus', route.params.location);
       }
       return () => {
         console.log('AddItemScreen: unmount');
@@ -49,27 +60,72 @@ export default function AddItemScreen({route}: AddItemScreenProps) {
     }, [route]),
   );
 
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate(homeNavigations.HOME_MAP)}>
-        <Text style={styles.text}>맵으로 이동</Text>
-      </TouchableOpacity>
+  const handleMapPress = () => {
+    navigation.navigate(homeNavigations.HOME_MAP);
+  };
 
-      {/* `location`이 없으면 기본값을 사용합니다. */}
-      <Text style={styles.text}>Latitude: {activeLocation.latitude}</Text>
-      <Text style={styles.text}>Longitude: {activeLocation.longitude}</Text>
-    </View>
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.contentContainer}>
+        <View style={styles.inputContainer}>
+          <InputField
+            placeholder="물건의 이름을 입력해주세요"
+            error={addItem.errors.itemName}
+            touched={addItem.touched.itemName}
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onSubmitEditing={() => itemPriceRef.current?.focus()}
+            {...addItem.getTextInputProps('itemName')}
+          />
+          <InputField
+            ref={itemPriceRef}
+            placeholder="물건의 가격을 메겨주세요"
+            error={addItem.errors.itemPrice}
+            touched={addItem.touched.itemPrice}
+            returnKeyType="next"
+            onSubmitEditing={() => itemDescriptionRef.current?.focus()}
+            {...addItem.getTextInputProps('itemPrice')}
+          />
+          <InputField
+            ref={itemDescriptionRef}
+            placeholder="물건에 대한 설명을 입력하세요 (선택사항)"
+            error={addItem.errors.itemDescription}
+            touched={addItem.touched.itemDescription}
+            multiline
+            returnKeyType="done"
+            {...addItem.getTextInputProps('itemDescription')}
+          />
+          <InputField
+            value=""
+            disabled
+            icon={<Octicons name="location" size={20} color={colors.GREY500} />}
+          />
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <CustomButton variant="filled" size="large" label="아이템 추가하기" />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
+  contentContainer: {
+    flex: 1,
+    padding: 20,
+    marginBottom: 10,
+  },
+  inputContainer: {
+    gap: 20,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flex: 0.3,
+    justifyContent: 'flex-end',
+    padding: 20,
+    marginBottom: 10,
   },
 });

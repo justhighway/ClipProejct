@@ -18,7 +18,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Pressable
         onPress={() => navigation.navigate(homeNavigations.HOME_ADDITEM)}>
-        <Text style={styles.text}>맵으로 이동</Text>
+        <Text style={styles.text}>AddItem으로 이동</Text>
       </Pressable>
     </View>
   );

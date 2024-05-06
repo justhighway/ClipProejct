@@ -15,13 +15,14 @@ interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   touched?: boolean;
+  icon?: React.ReactNode;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
 
 const InputField = forwardRef(
   (
-    {disabled = false, error, touched, ...props}: InputFieldProps,
+    {disabled = false, error, touched, icon = null, ...props}: InputFieldProps,
     ref?: ForwardedRef<TextInput>,
   ) => {
     const innerRef = useRef<TextInput | null>(null);
@@ -35,17 +36,21 @@ const InputField = forwardRef(
             styles.container,
             disabled && styles.disabled,
             touched && Boolean(error) && styles.inputError,
+            props.multiline && styles.multiline,
           ]}>
-          <TextInput
-            ref={ref ? mergeRefs(ref, innerRef) : innerRef}
-            editable={!disabled}
-            placeholderTextColor={colors.GREY500}
-            style={[styles.input, disabled && styles.disabled]}
-            autoCapitalize="none"
-            autoCorrect={false}
-            spellCheck={false}
-            {...props}
-          />
+          <View style={Boolean(icon) && styles.innerContainer}>
+            {icon}
+            <TextInput
+              ref={ref ? mergeRefs(ref, innerRef) : innerRef}
+              editable={!disabled}
+              placeholderTextColor={colors.GREY500}
+              style={[styles.input, disabled && styles.disabled]}
+              autoCapitalize="none"
+              autoCorrect={false}
+              spellCheck={false}
+              {...props}
+            />
+          </View>
           {touched && Boolean(error) && (
             <Text style={styles.textError}>{error}</Text>
           )}
@@ -58,14 +63,23 @@ const InputField = forwardRef(
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: colors.GREY200,
+    borderColor: colors.GREY400,
     padding: deviceHeight > 700 ? 15 : 10,
+    borderRadius: 10,
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
   },
   input: {
     fontSize: 16,
     color: colors.GREY900,
     padding: 0,
     borderRadius: 20,
+  },
+  multiline: {
+    paddingBottom: deviceHeight > 700 ? 65 : 40,
   },
   disabled: {
     backgroundColor: colors.GREY200,

@@ -1,4 +1,4 @@
-import React, {Fragment, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -28,10 +28,7 @@ export default function MapScreen() {
   const navigaiton = useNavigation<Navigations>();
   const mapRef = useRef<MapView | null>(null);
   const {userLocation, isUserLocationError} = useUserLocation();
-  const [location, setLocation] = useState<LatLng>({
-    latitude: userLocation.latitude,
-    longitude: userLocation.longitude,
-  });
+  const [location, setLocation] = useState<LatLng>(userLocation || {});
   usePermission('LOCATION');
 
   const usePressUserLocation = () => {
@@ -47,7 +44,7 @@ export default function MapScreen() {
   };
 
   const handlePressButton = () => {
-    navigaiton.navigate(homeNavigations.HOME_HOME, {location: location});
+    navigaiton.navigate(homeNavigations.HOME_ADDITEM, {location});
   };
 
   return (
@@ -66,7 +63,6 @@ export default function MapScreen() {
           longitudeDelta: 0.0421,
         }}
         onRegionChange={region => {
-          console.log(region);
           setLocation(region);
         }}
         onRegionChangeComplete={region => {

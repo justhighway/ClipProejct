@@ -1,6 +1,6 @@
 /* axios.create로 axios 인스턴스 생성
  baseURL: 요청을 보낼 기본 URL
- withCredentials: 요청을 보낼 때 쿠키를 함께 보내는 것을 의미
+ withCredentials: 요청을 보낼 때 쿠키()를 함께 보내는 것을 의미
  */
 
 import axios from 'axios';
@@ -15,4 +15,9 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export default axiosInstance;
+const axiosInstance2 = axios.create({
+  baseURL: 'http://15.165.40.73:8080/items',
+  withCredentials: true,
+});
+
+export {axiosInstance, axiosInstance2};
