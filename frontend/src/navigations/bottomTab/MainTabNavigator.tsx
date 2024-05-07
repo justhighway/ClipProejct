@@ -15,12 +15,14 @@ import MyPageStackNavigator, {
 } from '../stack/MyPageStackNavigator';
 import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import TabBarButton from '@/components/TabBarButton';
 
 export type MainTabParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<HomeStackParamList>;
   [mainNavigations.COMMUNITY]: NavigatorScreenParams<communityStackParamList>;
   [mainNavigations.CHAT]: NavigatorScreenParams<chatStackParamList>;
   [mainNavigations.MYPAGE]: NavigatorScreenParams<myPageStackParamList>;
+  [mainNavigations.ADDITEM]: undefined;
 };
 
 const BottomTab = createBottomTabNavigator<MainTabParamList>();
@@ -54,29 +56,33 @@ const BottomTabIcons = (
 };
 
 export default function MainTabNavigator() {
+  const handlePressButton = () => {};
   return (
-    <BottomTab.Navigator
-      screenOptions={({route}) => ({
-        headerShown: false,
-        tabBarIcon: ({focused}) => BottomTabIcons(route, focused),
-        tabBarLabel: () => null,
-      })}>
-      <BottomTab.Screen
-        name={mainNavigations.HOME}
-        component={HomeStackNavigator}
-      />
-      <BottomTab.Screen
-        name={mainNavigations.COMMUNITY}
-        component={CommunityStackNavigator}
-      />
-      <BottomTab.Screen
-        name={mainNavigations.CHAT}
-        component={ChatStackNavigator}
-      />
-      <BottomTab.Screen
-        name={mainNavigations.MYPAGE}
-        component={MyPageStackNavigator}
-      />
-    </BottomTab.Navigator>
+    <>
+      <BottomTab.Navigator
+        screenOptions={({route}) => ({
+          headerShown: false,
+          tabBarIcon: ({focused}) => BottomTabIcons(route, focused),
+          tabBarLabel: () => null,
+        })}>
+        <BottomTab.Screen
+          name={mainNavigations.HOME}
+          component={HomeStackNavigator}
+        />
+        <BottomTab.Screen
+          name={mainNavigations.COMMUNITY}
+          component={CommunityStackNavigator}
+        />
+        <BottomTab.Screen
+          name={mainNavigations.CHAT}
+          component={ChatStackNavigator}
+        />
+        <BottomTab.Screen
+          name={mainNavigations.MYPAGE}
+          component={MyPageStackNavigator}
+        />
+      </BottomTab.Navigator>
+      {/* <TabBarButton /> */}
+    </>
   );
 }

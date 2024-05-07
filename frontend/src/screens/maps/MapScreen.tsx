@@ -1,18 +1,10 @@
-import React, {Fragment, useRef, useState} from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import MapView, {LatLng, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {colors, homeNavigations} from '@/constants';
 import useUserLocation from '@/hooks/useUserLocation';
 import usePermission from '@/hooks/usePermission';
-import CustomMarker from '@/components/CustomMarker';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {HomeStackParamList} from '@/navigations/stack/HomeStackNavigator';
@@ -32,27 +24,15 @@ export default function MapScreen() {
   const [location, setLocation] = useState<LatLng>(userLocation || {});
   usePermission('LOCATION');
 
-  const usePressUserLocation = () => {
-    if (isUserLocationError) {
-      return;
-    }
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
-  };
-
   const handlePressButton = () => {
     navigaiton.navigate(homeNavigations.HOME_ADDITEM, {location});
   };
 
   return (
-    <Fragment>
+    <>
       <MapView
         ref={mapRef}
-        style={styles.container}
+        style={styles.mapContainer}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
         followsUserLocation
@@ -71,31 +51,33 @@ export default function MapScreen() {
         }}>
         <Marker coordinate={location} />
       </MapView>
-      <View style={styles.buttonContainer}>
+      <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
           <Text style={styles.text}>위도: {location.latitude}</Text>
           <Text style={styles.text}>경도: {location.longitude}</Text>
         </View>
         <CustomButton
-          label="아이템 추가 화면으로 이동 "
+          label="이 위치로 주소 설정"
           variant="filled"
           size="large"
           onPress={handlePressButton}
         />
       </View>
-    </Fragment>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mapContainer: {
     flex: 1,
     justifyContent: 'center',
   },
-  buttonContainer: {
+  locationContainer: {
     flex: 0.2,
     padding: 20,
     backgroundColor: colors.WHITE,
+    borderTopWidth: 1,
+    borderTopColor: colors.GREY500,
   },
   addressContainer: {
     justifyContent: 'center',
@@ -103,6 +85,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
   },
 });

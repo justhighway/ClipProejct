@@ -3,6 +3,7 @@ const mainNavigations = {
   COMMUNITY: 'Community',
   CHAT: 'Chat',
   MYPAGE: 'MyPage',
+  ADDITEM: 'AddItem',
 } as const;
 
 const authNavigations = {

@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import useAuth from '@/hooks/queries/useAuth';
 import {colors} from '@/constants';
@@ -36,12 +37,24 @@ export default function MyPageScreen() {
           )}
         </View>
         <Text style={styles.nameText}>{nickname ?? email}</Text>
+        <TouchableOpacity style={styles.editProfileButton}>
+          <Text style={styles.editProfileText}>프로필 수정</Text>
+        </TouchableOpacity>
       </View>
-      <ScrollView style={styles.listContainer}>
-        <Pressable onPress={handleSignOut}>
-          <Text>로그아웃</Text>
+      <View style={styles.listContainer}>
+        <Pressable style={styles.listBox}>
+          <Text style={styles.listText}>물건 내역 관리</Text>
         </Pressable>
-      </ScrollView>
+        <Pressable style={styles.listBox}>
+          <Text style={styles.listText}>거래 후기</Text>
+        </Pressable>
+        <Pressable style={styles.listBox}>
+          <Text style={styles.listText}>알림 설정</Text>
+        </Pressable>
+        <Pressable style={styles.listBox} onPress={handleSignOut}>
+          <Text style={styles.listText}>로그아웃</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
@@ -49,11 +62,14 @@ export default function MyPageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.WHITE,
   },
   userProfileContainer: {
-    flex: 1,
+    flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.GREY500,
   },
   userImageContainer: {
     width: 70,
@@ -64,13 +80,31 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
   },
+  listBox: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.GREY500,
+    padding: 20,
+  },
   userImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 35,
+  },
+  editProfileButton: {
+    backgroundColor: colors.PURPLE500,
+    padding: 7,
+    borderRadius: 18,
   },
   nameText: {
     fontSize: 20,
-    color: colors.BLACK,
+    color: colors.GREY800,
+    marginBottom: 8,
+  },
+  editProfileText: {
+    fontSize: 12,
+    color: colors.WHITE,
+  },
+  listText: {
+    fontSize: 20,
+    color: colors.GREY800,
   },
 });
