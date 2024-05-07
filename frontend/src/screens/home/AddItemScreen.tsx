@@ -103,10 +103,12 @@ export default function AddItemScreen({route}: AddItemScreenProps) {
             icon={<Octicons name="location" size={20} color={colors.GREY500} />}
           /> */}
           <Pressable onPress={handleMapPress}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.locationContainer}>
               <Octicons name="location" size={20} color={colors.GREY500} />
               <Text style={{marginLeft: 10}}>
-                {selectedLocation?.name || '거래 희망 위치를 선택해주세요'}
+                {selectedLocation
+                  ? `위도: ${selectedLocation.latitude},\n경도: ${selectedLocation.longitude}`
+                  : '거래 희망 위치를 선택해주세요'}
               </Text>
             </View>
           </Pressable>
@@ -131,6 +133,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,
     marginBottom: 20,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.GREY300,
+    padding: 10,
+    borderRadius: 10,
   },
   buttonContainer: {
     flex: 0.3,
