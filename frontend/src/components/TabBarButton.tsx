@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Platform, Pressable, StyleSheet, Animated} from 'react-native'; // Step 1
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {MaterialIcons} from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const TABBAR_HEIGHT = 49;
 
