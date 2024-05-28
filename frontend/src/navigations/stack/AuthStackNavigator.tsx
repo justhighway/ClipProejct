@@ -6,6 +6,8 @@ import AuthHomeScreen from '@/screens/auth/AuthScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import SignUpScreen from '@/screens/auth/SignUpScreen';
 
+// AuthStack에는 다음과 같이 정의한 screen 이름과 params 타입만 전달될 수 있다
+// AuthStack에는 params는 필요 없으므로 모두 undefined로 처리
 export type AuthStackParamList = {
   [authNavigations.AUTH_HOME]: undefined;
   [authNavigations.AUTH_SIGNIN]: undefined;
@@ -34,7 +36,6 @@ export default function AuthStackNavigator() {
         name={authNavigations.AUTH_HOME}
         component={AuthHomeScreen}
         options={{
-          title: ' ',
           headerShown: false,
         }}
       />

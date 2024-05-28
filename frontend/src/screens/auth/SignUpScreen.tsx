@@ -1,28 +1,73 @@
-import React, {useRef} from 'react';
-import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import InputField from '@/components/InputField';
 import CustomButton from '@/components/CustomButton';
 import useForm from '@/hooks/useForm';
-import useAuth from '@/hooks/queries/useAuth';
 import {validateSignUp} from '@/utils';
+import {colors} from '@/constants';
+import {useAuth} from '@/hooks/queries/useAuth';
+import axios from 'axios';
 
 function SignUpScreen() {
   const passwordRef = useRef<TextInput | null>(null);
   const passwordConfirmRef = useRef<TextInput | null>(null);
+  const [loading, setLoading] = useState(false);
   const {signInMutation, signUpMutation} = useAuth();
   const signUp = useForm({
-    initialValue: {email: '', password: '', passwordConfirm: ''},
+    initialValue: {username: '', password: '', passwordConfirm: ''},
     validate: validateSignUp,
   });
 
+  const signUpApi = async (username: string, password: string) => {
+    try {
+      const data = await axios.post(
+        'https://15.165.40.73:8080/members/sign-up',
+        {
+          username,
+          password,
+        },
+      );
+      console.log('회원가입 성공', data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
   const handleSubmit = () => {
-    const {email, password} = signUp.values;
-    signUpMutation.mutate(
-      {email, password},
-      {
-        onSuccess: () => signInMutation.mutate({email, password}),
-      },
-    );
+    const {username, password} = signUp.values;
+    signUpApi(username, password);
+    // setLoading(true); // 시작 시 로딩 상태로 설정
+    // signUpMutation.mutate(
+    //   {username, password},
+    //   {
+    //     onSuccess: () => {
+    //       signInMutation.mutate(
+    //         {username, password},
+    //         {
+    //           onSuccess: s => {
+    //             setLoading(false);
+    //             console.log(s);
+    //           },
+    //           onError: e => {
+    //             setLoading(false);
+    //             console.log(e);
+    //           },
+    //         },
+    //       );
+    //     },
+    //     onError: () => setLoading(false),
+    //     onSettled: () => {
+    //       console.log('회원가입 시도는 함', username, password);
+    //     },
+    //   },
+    // );
   };
 
   return (
@@ -31,13 +76,13 @@ function SignUpScreen() {
         <InputField
           autoFocus
           placeholder="이메일"
-          error={signUp.errors.email}
-          touched={signUp.touched.email}
+          error={signUp.errors.username}
+          touched={signUp.touched.username}
           inputMode="email"
           returnKeyType="next"
           blurOnSubmit={false}
           onSubmitEditing={() => passwordRef.current?.focus()}
-          {...signUp.getTextInputProps('email')}
+          {...signUp.getTextInputProps('username')}
         />
         <InputField
           ref={passwordRef}
@@ -62,7 +107,11 @@ function SignUpScreen() {
           {...signUp.getTextInputProps('passwordConfirm')}
         />
       </View>
-      <CustomButton label="회원가입" onPress={handleSubmit} />
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.PURPLE300} />
+      ) : (
+        <CustomButton label="회원가입" onPress={handleSubmit} />
+      )}
     </SafeAreaView>
   );
 }

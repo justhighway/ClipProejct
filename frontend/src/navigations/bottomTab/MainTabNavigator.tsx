@@ -13,9 +13,14 @@ import ChatStackNavigator, {
 import MyPageStackNavigator, {
   myPageStackParamList,
 } from '../stack/MyPageStackNavigator';
-import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
+import {
+  NavigatorScreenParams,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TabBarButton from '@/components/TabBarButton';
+import AddItemScreen from '@/screens/home/AddItemScreen';
 
 export type MainTabParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<HomeStackParamList>;
@@ -56,7 +61,10 @@ const BottomTabIcons = (
 };
 
 export default function MainTabNavigator() {
-  const handlePressButton = () => {};
+  const navigation = useNavigation();
+  const handlePressButton = () => {
+    navigation.navigate(mainNavigations.ADDITEM);
+  };
   return (
     <>
       <BottomTab.Navigator
@@ -82,7 +90,7 @@ export default function MainTabNavigator() {
           component={MyPageStackNavigator}
         />
       </BottomTab.Navigator>
-      {/* <TabBarButton /> */}
+      <TabBarButton onPress={handlePressButton} />
     </>
   );
 }

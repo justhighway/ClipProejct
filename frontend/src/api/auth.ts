@@ -1,45 +1,49 @@
-import {Category, Profile} from '@/types/domain';
 import {getEncryptedStorage} from '@/utils';
 import {axiosInstance} from '@/api/axios';
+import {Profile} from '@/types/domain';
 
 // axiosInstance: axios.create로 생성한 axios 인스턴스
-// baseURL: 'http://localhost:3030', withCredentials: true
 
-type RequestUser = {
-  email: string;
+export type RequestUser = {
+  username: string;
   password: string;
 };
-const postSignUp = async ({email, password}: RequestUser): Promise<void> => {
-  const {data} = await axiosInstance.post('/auth/signup', {
-    email,
-    password,
-  });
-  return data;
-};
 
-type ResponseToken = {
+export type ResponseToken = {
+  grantType: string;
   accessToken: string;
   refreshToken: string;
 };
 
-const postSignIn = async ({
-  email,
+export type ResponseProfile = Profile;
+
+export const postSignUp = async ({
+  username,
   password,
-}: RequestUser): Promise<ResponseToken> => {
-  const {data} = await axiosInstance.post('/auth/signin', {
-    email,
+}: RequestUser): Promise<void> => {
+  const {data} = await axiosInstance.post('/members/sign-up', {
+    username,
     password,
   });
   return data;
 };
 
-type ResponseProfile = Profile & Category;
-const getProfile = async (): Promise<ResponseProfile> => {
-  const {data} = await axiosInstance.get('/auth/me');
+export const postSignIn = async ({
+  username,
+  password,
+}: RequestUser): Promise<ResponseToken> => {
+  const {data} = await axiosInstance.post('/members/sign-in', {
+    username,
+    password,
+  });
   return data;
 };
 
-const getAccessToken = async (): Promise<ResponseToken> => {
+export const postSignOut = async (): Promise<void> => {
+  await axiosInstance.post('/auth/logout');
+};
+
+export const getAccessToken = async (): Promise<ResponseToken> => {
   const refreshToken = await getEncryptedStorage('refreshToken');
   const {data} = await axiosInstance.get('/auth/refresh', {
     headers: {
@@ -49,9 +53,12 @@ const getAccessToken = async (): Promise<ResponseToken> => {
   return data;
 };
 
-const signOut = async (): Promise<void> => {
-  await axiosInstance.post('/auth/logout');
+export const getProfile = async (): Promise<ResponseProfile> => {
+  const accessToken = await getEncryptedStorage('accessToken');
+  const {data} = await axiosInstance.get('/members', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return data;
 };
-
-export {postSignUp, postSignIn, getProfile, getAccessToken, signOut};
-export type {RequestUser, ResponseToken, ResponseProfile};

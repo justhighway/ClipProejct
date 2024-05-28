@@ -1,8 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
-const AnimatedText = ({text, isVisible}) => {
+interface AnimatedTextProps {
+  text: string;
+  isVisible: boolean;
+}
+
+const AnimatedText = ({text, isVisible}: AnimatedTextProps) => {
   return (
     <Animatable.View
       style={[styles.container, {opacity: isVisible ? 1 : 0}]}

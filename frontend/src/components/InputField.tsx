@@ -25,10 +25,12 @@ const InputField = forwardRef(
     {disabled = false, error, touched, icon = null, ...props}: InputFieldProps,
     ref?: ForwardedRef<TextInput>,
   ) => {
+    // Pressable 영역을 클릭하면 TextInput에 focus가 갈 수 있도록 처리
     const innerRef = useRef<TextInput | null>(null);
     const handlePressInput = () => {
       innerRef.current?.focus();
     };
+
     return (
       <Pressable onPress={handlePressInput}>
         <View

@@ -1,6 +1,6 @@
 import React from 'react';
 import {colors} from '@/constants';
-import {StyleSheet, StyleSheetProperties, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 export default function CustomMarker() {
   return (

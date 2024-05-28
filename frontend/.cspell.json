@@ -9,6 +9,9 @@
     "kakao",
     "Ionicons",
     "navigaiton",
-    "ADDITEM"
+    "ADDITEM",
+    "SIGNUP",
+    "tanstack",
+    "Swiper"
   ]
 }

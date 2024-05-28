@@ -1,45 +1,18 @@
-type MarkerColor = 'RED' | 'YELLOW' | 'GREEN' | 'BLUE' | 'PURPLE';
-
-type Category = {
-  [key in MarkerColor]: string;
-};
-
-interface ImageUri {
+export interface ImageUri {
   id?: number;
   uri: string;
 }
 
-interface Marker {
+export interface Profile {
   id: number;
-  latitude: number;
-  longitude: number;
-  color: MarkerColor;
-  score: number;
-}
-
-//! item에 맞게 바꿀 것!!
-interface Post extends Marker {
-  title: string;
-  address: string;
-  date: Date | string;
-  description: string;
-}
-
-interface AddItem {
-  itemName: string;
-  itemPrice: string;
-  itemCondition: number;
-  itemDescription: string;
-  itemLocation: string;
-}
-
-interface Profile {
-  id: number;
-  email: string;
+  username: string; // TODO: userEmail로 수정
+  password: null; //! password 뺄 것
+  phone: string | null;
+  profileImg: string | null; // TODO: Img -> Image로 수정
   nickname: string | null;
-  imageUri: string | null;
-  kakaoImageUri: string | null;
-  loginType: 'email' | 'kakao' | 'apple';
-}
+  userLevel: number;
+  userEXP: number;
 
-export type {MarkerColor, Category, ImageUri, Marker, Post, Profile, AddItem};
+  // TODO: kakaoProfileImage: string | null; // TODO: 카카오 요청
+  // TODO: loginType: 'email' | 'kakao' | 'apple';
+}

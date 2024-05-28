@@ -9,6 +9,7 @@ import {
 import RootNavigator from './src/navigations/root/RootNavigator';
 import queryClient from './src/api/queryClient';
 import {useColorScheme} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // react-query는 data fetching을 위한 useQuery,
 // data update를 위한 useMutation을 제공한다.
@@ -18,9 +19,11 @@ export default function App(): React.JSX.Element {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer theme={theme}>
-        <RootNavigator />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer theme={theme}>
+          <RootNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
     </QueryClientProvider>
   );
 }

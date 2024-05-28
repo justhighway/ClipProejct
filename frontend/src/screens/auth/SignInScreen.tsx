@@ -3,20 +3,23 @@ import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
 import InputField from '@/components/InputField';
 import CustomButton from '@/components/CustomButton';
 import useForm from '@/hooks/useForm';
-import useAuth from '@/hooks/queries/useAuth';
 import {validateSignIn} from '@/utils';
+import {useAuth} from '@/hooks/queries/useAuth';
 
 function SignInScreen() {
-  const {signInMutation} = useAuth();
   const passwordRef = useRef<TextInput | null>(null);
-  const login = useForm({
-    initialValue: {email: '', password: ''},
+  const {signInMutation} = useAuth();
+  const signIn = useForm({
+    initialValue: {username: '', password: ''},
     validate: validateSignIn,
   });
 
   const handleSubmit = () => {
-    signInMutation.mutate(login.values);
-    console.log('login.values', login.values);
+    signInMutation.mutate(signIn.values, {
+      onSuccess: () => console.log('로그인 성공'),
+      onError: error => console.log(error),
+      onSettled: () => console.log('로그인 시도'),
+    });
   };
 
   return (
@@ -25,23 +28,23 @@ function SignInScreen() {
         <InputField
           autoFocus
           placeholder="이메일"
-          error={login.errors.email}
-          touched={login.touched.email}
+          error={signIn.errors.username}
+          touched={signIn.touched.username}
           inputMode="email"
           returnKeyType="next"
           blurOnSubmit={false}
           onSubmitEditing={() => passwordRef.current?.focus()}
-          {...login.getTextInputProps('email')}
+          {...signIn.getTextInputProps('username')}
         />
         <InputField
           ref={passwordRef}
           placeholder="비밀번호"
-          error={login.errors.password}
-          touched={login.touched.password}
+          error={signIn.errors.password}
+          touched={signIn.touched.password}
           secureTextEntry
           returnKeyType="join"
           onSubmitEditing={handleSubmit}
-          {...login.getTextInputProps('password')}
+          {...signIn.getTextInputProps('password')}
         />
       </View>
       <CustomButton

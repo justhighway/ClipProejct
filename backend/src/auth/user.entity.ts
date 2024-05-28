@@ -1,20 +1,16 @@
-import { Favorite } from 'src/favorite/favorite.entity';
-import { MarkerColor } from 'src/post/marker-color.enum';
-import { Post } from 'src/post/post.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-@Unique(['email'])
+@Unique(['username'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,34 +19,28 @@ export class User extends BaseEntity {
   loginType: 'email' | 'kakao' | 'apple';
 
   @Column()
-  email: string;
+  username: string;
 
   @Column()
   password: string;
 
   @Column({ nullable: true })
-  nickname?: string;
+  phone?: string;
 
   @Column({ nullable: true })
-  imageUri?: string;
+  profileImg?: string;
 
   @Column({ nullable: true })
   kakaoImageUri?: string;
 
-  @Column({ nullable: true, default: '' })
-  [MarkerColor.RED]: string;
+  @Column({ nullable: true })
+  nickname?: string;
 
-  @Column({ nullable: true, default: '' })
-  [MarkerColor.YELLOW]: string;
+  @Column({ default: 4 })
+  userLevel: number;
 
-  @Column({ nullable: true, default: '' })
-  [MarkerColor.GREEN]: string;
-
-  @Column({ nullable: true, default: '' })
-  [MarkerColor.BLUE]: string;
-
-  @Column({ nullable: true, default: '' })
-  [MarkerColor.PURPLE]: string;
+  @Column({ default: 0 })
+  userExp: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -63,10 +53,4 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   hashedRefreshToken?: string;
-
-  @OneToMany(() => Post, (post) => post.user, { eager: false })
-  post: Post[];
-
-  @OneToMany(() => Favorite, (favorite) => favorite.user)
-  favorites: Favorite[];
 }

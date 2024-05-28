@@ -16,14 +16,14 @@ export type HomeStackParamList = {
 const Stack = createStackNavigator<HomeStackParamList>();
 
 export default function HomeStackNavigator({navigation, route}) {
-  React.useLayoutEffect(() => {
-    const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName !== homeNavigations.HOME_HOME) {
-      navigation.setOptions({tabBarStyle: {display: 'none'}});
-    } else {
-      navigation.setOptions({tabBarStyle: {display: undefined}});
-    }
-  }, [navigation, route]);
+  // React.useLayoutEffect(() => {
+  //   const routeName = getFocusedRouteNameFromRoute(route);
+  //   if (routeName !== homeNavigations.HOME_HOME) {
+  //     navigation.setOptions({tabBarStyle: {display: 'none'}});
+  //   } else {
+  //     navigation.setOptions({tabBarStyle: {display: undefined}});
+  //   }
+  // }, [navigation, route]);
 
   return (
     <Stack.Navigator>
@@ -32,6 +32,7 @@ export default function HomeStackNavigator({navigation, route}) {
         component={HomeScreen}
         options={{
           headerShown: false,
+          headerTitle: '뒤로가기',
         }}
       />
       <Stack.Screen

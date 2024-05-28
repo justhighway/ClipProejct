@@ -4,6 +4,6 @@ import MainTabNavigator from '../bottomTab/MainTabNavigator';
 import AuthStackNavigator from '../stack/AuthStackNavigator';
 
 export default function RootNavigator() {
-  const {isSignIn} = useAuth();
+  const isSignIn = false;
   return <>{isSignIn ? <MainTabNavigator /> : <AuthStackNavigator />}</>;
 }

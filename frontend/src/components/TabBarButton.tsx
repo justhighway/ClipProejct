@@ -54,7 +54,7 @@ export default function TabBarButton({onPress}) {
           rotateButton();
           onPress();
         }}>
-        <MaterialIcons name="plus" color="white" size={40} />
+        <MaterialIcons name="add" color="white" size={40} />
       </Pressable>
     </Animated.View>
   );
